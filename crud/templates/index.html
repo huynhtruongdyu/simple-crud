@@ -1,0 +1,77 @@
+{% extends '_layout.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+    <div class="button-group" style="margin: auto;">
+        <a href="{% url 'crud:laptops' %}" class="btn btn-outline-primary btn-md" role="button">Laptop</a>
+        <span>|</span>
+        <a href="{% url 'crud:desktops' %}" class="btn btn-outline-primary btn-md" role="button">Desktop</a>
+        <span>|</span>
+        <a href="{% url 'crud:mobiles' %}" class="btn btn-outline-primary btn-md" role="button">Mobile</a>
+        
+    </div>
+
+    {% if header == "" %}
+        <br>
+        <img src="{% static "img/dvd.gif" %}" alt="My image" class="rounded mx-auto d-block" width="840px" height="600px">
+    {% else %}
+        <br>
+        <h4>Current view: {{ header }} 
+            {% if header|lower == "laptop" %}
+                <a href="{% url 'crud:add_laptop' %}" class="btn btn-outline-secondary btn-sm" role="button">+</a>
+            {% elif header|lower == "desktop" %}
+                <a href="{% url 'crud:add_desktop' %}" class="btn btn-outline-secondary btn-sm" role="button">+</a>
+            {% else %}
+                <a href="{% url 'crud:add_mobile' %}" class="btn btn-outline-secondary btn-sm" role="button">+</a>
+            {% endif %}
+        </h4>
+        <br>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Issues</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{item.type}}</td>
+                        <td>{{item.price|intcomma}} USD</td>
+                        <td>
+                            {% if item.status == 'AVAILIBLE'%}
+                                <button type="button" class="btn btn-outline-success btn-sm" disabled>{{item.status}}</button>
+                            {% elif item.status == 'SOLD' %}
+                                <button type="button" class="btn btn-outline-danger btn-sm" disabled>{{item.status}}</button>
+                            {% else %}
+                                <button type="button" class="btn btn-outline-primary btn-sm" disabled>{{item.status}}</button>
+                            {% endif %}
+                        </td>
+                        <td>{{item.issues}}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                {% if header|lower == "laptop" %}
+                                    <a href="{% url 'crud:edit_laptop' item.id%}" type="button" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'crud:del_laptop' item.id %}" type="button" class="btn btn-danger btn-sm">Remove</a>
+                                {% elif header|lower == "desktop" %}
+                                    <a href="{% url 'crud:edit_desktop' item.id%}" type="button" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'crud:del_desktop' item.id %}" type="button" class="btn btn-danger btn-sm">Remove</a>
+                                {% else %}
+                                    <a href="{% url 'crud:edit_mobile' item.id%}" type="button" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'crud:del_mobile' item.id %}" type="button" class="btn btn-danger btn-sm">Remove</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock content %}
+    
+

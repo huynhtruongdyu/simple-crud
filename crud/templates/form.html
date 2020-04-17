@@ -1,0 +1,18 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            {% for field in form %}
+                <div class="form-group row">
+                    <label for="id_{{ field.name }}" class="col-3 col-form-label">{{ field.label }}</label>
+                    <div class="col-9">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock content %}
